@@ -1,0 +1,669 @@
+
+ <!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+ 
+    <title>FreshCart - Online Grocery Store</title> 
+ 
+    <link rel="stylesheet" href="style.css"> 
+</head> 
+ 
+<body> 
+ 
+    <!-- ================= NAVBAR ================= --> 
+ 
+    <nav class="navbar"> 
+ 
+        <div class="logo"> 
+            🛒 FreshCart 
+        </div> 
+ 
+        <div class="search"> 
+            <input id="searchInput" type="text" placeholder="Search for groceries..."> 
+        </div> 
+ 
+        <div class="nav-links"> 
+ 
+            <span onclick="scrollToProducts()">Home</span> 
+ 
+            <span onclick="scrollToCategories()">Categories</span> 
+ 
+            <span id="cartBtn"> 
+                🛒 Cart 
+                <b id="cartCount">0</b> 
+            </span> 
+ 
+            <span id="loginBtn">👤 Login</span> 
+ 
+            <span id="profileBtn" style="display:none;"> 
+                👤 Profile 
+            </span> 
+ 
+            <!-- ADMIN BUTTON --> 
+            <span id="adminBtn">🛠️ Admin</span> 
+ 
+        </div> 
+ 
+    </nav> 
+ 
+ 
+    <!-- ================= HERO ================= --> 
+ 
+    <section class="hero"> 
+ 
+        <div class="hero-text"> 
+ 
+            <h1>Fresh Groceries Delivered to Your Door</h1> 
+ 
+            <p> 
+                Shop fresh fruits, vegetables, dairy products 
+                and daily essentials at the best prices. 
+            </p> 
+ 
+            <button class="shop-btn" onclick="scrollToProducts()"> 
+                Shop Now 
+            </button> 
+ 
+        </div> 
+ 
+        <div class="hero-image"> 
+            🥦 🍎 🥕 🥛 🍅 🍌 
+        </div> 
+ 
+    </section> 
+ 
+ 
+    <!-- ================= CATEGORIES ================= --> 
+ 
+    <section class="categories" id="categoriesSection"> 
+ 
+        <h2>Shop by Category</h2> 
+ 
+        <div id="categoryButtons" class="category-container"></div> 
+ 
+    </section> 
+ 
+ 
+    <!-- ================= PRODUCTS ================= --> 
+ 
+    <section class="products" id="productsSection"> 
+ 
+        <h2>Popular Products</h2> 
+ 
+        <p id="productResultText">0 product(s)</p> 
+ 
+        <div id="productGrid" class="product-container"></div> 
+ 
+    </section> 
+ 
+ 
+    <!-- ================= RECOMMENDED ================= --> 
+ 
+    <section class="products"> 
+ 
+        <h2>⭐ Recommended For You</h2> 
+ 
+        <div id="recommendedProducts" class="product-container"></div> 
+ 
+    </section> 
+ 
+ 
+    <!-- ================= OVERLAY ================= --> 
+ 
+    <div id="overlay"></div> 
+ 
+ 
+    <!-- ================= CART ================= --> 
+ 
+    <div id="cartDrawer"> 
+ 
+        <button id="closeCartBtn" class="close-btn">✕</button> 
+ 
+        <h2>🛒 Your Cart</h2> 
+ 
+        <div id="cartItems"> 
+            <p>Your cart is empty.</p> 
+        </div> 
+ 
+        <div class="cart-summary"> 
+ 
+            <p> 
+                Subtotal: 
+                ₹<span id="subtotal">0</span> 
+            </p> 
+ 
+            <p> 
+                Discount: 
+                ₹<span id="discount">0</span> 
+            </p> 
+ 
+            <p class="total"> 
+                Total: 
+                ₹<span id="total">0</span> 
+            </p> 
+ 
+        </div> 
+ 
+        <div class="coupon"> 
+ 
+            <input 
+                id="couponInput" 
+                type="text" 
+                placeholder="Coupon code" 
+            > 
+ 
+            <button id="applyCouponBtn"> 
+                Apply 
+            </button> 
+ 
+            <p id="couponMessage"></p> 
+ 
+        </div> 
+ 
+        <button id="checkoutBtn" class="checkout-btn"> 
+            Place Order 
+        </button> 
+ 
+    </div> 
+ 
+ 
+    <!-- ================= TRACKING ================= --> 
+ 
+    <div id="trackingModal"> 
+ 
+        <button id="closeTrackingBtn" class="close-btn"> 
+            ✕ 
+        </button> 
+ 
+        <h2>📦 Track Your Order</h2> 
+ 
+        <p id="trackingOrderId"> 
+            No active order yet. 
+        </p> 
+ 
+        <div class="tracking"> 
+ 
+            <div class="track-step"> 
+                <span>1</span> 
+                <p>Order Placed</p> 
+            </div> 
+ 
+            <div class="track-step"> 
+                <span>2</span> 
+                <p>Preparing</p> 
+            </div> 
+ 
+            <div class="track-step"> 
+                <span>3</span> 
+                <p>Out for Delivery</p> 
+            </div> 
+ 
+            <div class="track-step"> 
+                <span>4</span> 
+                <p>Delivered</p> 
+            </div> 
+ 
+        </div> 
+ 
+        <button id="advanceTrackingBtn"> 
+            Next Status 
+        </button> 
+ 
+    </div> 
+ 
+ 
+    <!-- ================= LOGIN MODAL ================= --> 
+ 
+    <div id="loginModal" class="auth-modal"> 
+ 
+        <div class="auth-box"> 
+ 
+            <button id="closeLoginBtn" class="close-auth"> 
+                ✕ 
+            </button> 
+ 
+            <h2>Welcome Back 👋</h2> 
+ 
+            <p>Login to your grocery account</p> 
+ 
+            <input 
+                type="email" 
+                id="loginEmail" 
+                placeholder="Email" 
+            > 
+ 
+            <input 
+                type="password" 
+                id="loginPassword" 
+                placeholder="Password" 
+            > 
+ 
+            <button id="loginSubmitBtn" class="auth-btn"> 
+                Login 
+            </button> 
+ 
+            <p id="loginMessage"></p> 
+ 
+            <p> 
+                New user? 
+                <button id="showRegisterBtn" class="text-btn"> 
+                    Register 
+                </button> 
+            </p> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ================= REGISTER MODAL ================= --> 
+ 
+    <div id="registerModal" class="auth-modal"> 
+ 
+        <div class="auth-box"> 
+ 
+            <button id="closeRegisterBtn" class="close-auth"> 
+                ✕ 
+            </button> 
+ 
+            <h2>Create Account 🛒</h2> 
+ 
+            <p>Join our grocery store</p> 
+ 
+            <input 
+                type="text" 
+                id="registerName" 
+                placeholder="Full Name" 
+            > 
+ 
+            <input 
+                type="email" 
+                id="registerEmail" 
+                placeholder="Email" 
+            > 
+ 
+            <input 
+                type="password" 
+                id="registerPassword" 
+                placeholder="Password" 
+            > 
+ 
+            <button id="registerSubmitBtn" class="auth-btn"> 
+                Register 
+            </button> 
+ 
+            <p id="registerMessage"></p> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ================= PROFILE MODAL ================= --> 
+ 
+    <div id="profileModal" class="auth-modal"> 
+ 
+        <div class="auth-box"> 
+ 
+            <button id="closeProfileBtn" class="close-auth"> 
+                ✕ 
+            </button> 
+ 
+            <h2>👤 My Profile</h2> 
+ 
+            <p id="profileName"> 
+                Name: 
+            </p> 
+ 
+            <p id="profileEmail"> 
+                Email: 
+            </p> 
+ 
+            <hr> 
+ 
+            <h3>📦 My Orders</h3> 
+ 
+            <div id="myOrders"> 
+                <p>No orders yet.</p> 
+            </div> 
+ 
+            <button id="logoutBtn" class="auth-btn"> 
+                Logout 
+            </button> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ================= ADMIN LOGIN MODAL ================= --> 
+ 
+    <div id="adminLoginModal" class="auth-modal"> 
+ 
+        <div class="auth-box"> 
+ 
+            <button id="closeAdminLoginBtn" class="close-auth"> 
+                ✕ 
+            </button> 
+ 
+            <h2>🛠️ Admin Login</h2> 
+ 
+            <p>Login to manage FreshCart</p> 
+ 
+            <input 
+                type="email" 
+                id="adminEmail" 
+                placeholder="Admin Email" 
+            > 
+ 
+            <input 
+                type="password" 
+                id="adminPassword" 
+                placeholder="Admin Password" 
+            > 
+ 
+            <button 
+                id="adminLoginSubmitBtn" 
+                class="auth-btn" 
+            > 
+                Admin Login 
+            </button> 
+ 
+            <p id="adminLoginMessage"></p> 
+ 
+            <small> 
+                Demo Admin: 
+                admin@freshcart.com / admin123 
+            </small> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ================= ADMIN DASHBOARD ================= --> 
+ 
+    <section id="adminDashboard" class="admin-dashboard"> 
+ 
+        <div class="admin-header"> 
+ 
+            <div> 
+ 
+                <h1> 
+                    🛠️ Admin Dashboard 
+                </h1> 
+ 
+                <p> 
+                    Manage users, products and orders 
+                    from one place. 
+                </p> 
+ 
+            </div> 
+ 
+            <button 
+                id="adminLogoutBtn" 
+                class="admin-logout-btn" 
+            > 
+                Logout 
+            </button> 
+ 
+        </div> 
+ 
+ 
+        <!-- ================= STATISTICS ================= --> 
+ 
+        <div class="admin-stats"> 
+ 
+            <div class="stat-card"> 
+ 
+                <span>👥</span> 
+ 
+                <h3> 
+                    Total Users 
+                </h3> 
+ 
+                <strong id="adminUserCount"> 
+                    0 
+                </strong> 
+ 
+            </div> 
+ 
+ 
+            <div class="stat-card"> 
+ 
+                <span>📦</span> 
+ 
+                <h3> 
+                    Total Products 
+                </h3> 
+ 
+                <strong id="adminProductCount"> 
+                    0 
+                </strong> 
+ 
+            </div> 
+ 
+ 
+            <div class="stat-card"> 
+ 
+                <span>🛒</span> 
+ 
+                <h3> 
+                    Total Orders 
+                </h3> 
+ 
+                <strong id="adminOrderCount"> 
+                    0 
+                </strong> 
+ 
+            </div> 
+ 
+ 
+            <div class="stat-card"> 
+ 
+                <span>💰</span> 
+ 
+                <h3> 
+                    Total Sales 
+                </h3> 
+ 
+                <strong id="adminSales"> 
+                    ₹0 
+                </strong> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <!-- ================= USERS ================= --> 
+ 
+        <div class="admin-panel"> 
+ 
+            <div class="admin-panel-title"> 
+ 
+                <h2> 
+                    👥 Registered Users 
+                </h2> 
+ 
+                <button 
+                    class="refresh-btn" 
+                    onclick="renderAdminDashboard()" 
+                > 
+                    Refresh 
+                </button> 
+ 
+            </div> 
+ 
+ 
+            <div class="admin-table-wrap"> 
+ 
+                <table class="admin-table"> 
+ 
+                    <thead> 
+ 
+                        <tr> 
+                            <th>Name</th> 
+                            <th>Email</th> 
+                            <th>Login Status</th> 
+                        </tr> 
+ 
+                    </thead> 
+ 
+                    <tbody id="adminUsersTable"></tbody> 
+ 
+                </table> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <!-- ================= PRODUCT MANAGEMENT ================= --> 
+ 
+        <div class="admin-panel"> 
+ 
+            <div class="admin-panel-title"> 
+ 
+                <h2> 
+                    📦 Product Management 
+                </h2> 
+ 
+            </div> 
+ 
+ 
+            <div class="admin-form"> 
+ 
+                <input 
+                    id="adminProductName" 
+                    type="text" 
+                    placeholder="Product name" 
+                > 
+ 
+                <input 
+                    id="adminProductCategory" 
+                    type="text" 
+                    placeholder="Category" 
+                > 
+ 
+                <input 
+                    id="adminProductPrice" 
+                    type="number" 
+                    placeholder="Price" 
+                > 
+ 
+                <input 
+                    id="adminProductStock" 
+                    type="number" 
+                    placeholder="Stock" 
+                > 
+ 
+                <input 
+                    id="adminProductUnit" 
+                    type="text" 
+                    placeholder="Unit e.g. 1 kg" 
+                > 
+ 
+                <input 
+                    id="adminProductEmoji" 
+                    type="text" 
+                    placeholder="Emoji e.g. 🍎" 
+                > 
+ 
+                <button 
+                    id="adminAddProductBtn" 
+                    class="admin-action-btn" 
+                > 
+                    + Add Product 
+                </button> 
+ 
+            </div> 
+ 
+ 
+            <div class="admin-table-wrap"> 
+ 
+                <table class="admin-table"> 
+ 
+                    <thead> 
+ 
+                        <tr> 
+                            <th>Product</th> 
+                            <th>Category</th> 
+                            <th>Price</th> 
+                            <th>Stock</th> 
+                            <th>Action</th> 
+                        </tr> 
+ 
+                    </thead> 
+ 
+                    <tbody id="adminProductsTable"></tbody> 
+ 
+                </table> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <!-- ================= ORDERS ================= --> 
+ 
+        <div class="admin-panel"> 
+ 
+            <div class="admin-panel-title"> 
+ 
+                <h2> 
+                    🛒 Customer Orders 
+                </h2> 
+ 
+            </div> 
+ 
+ 
+            <div class="admin-table-wrap"> 
+ 
+                <table class="admin-table"> 
+ 
+                    <thead> 
+ 
+                        <tr> 
+                            <th>Order ID</th> 
+                            <th>User</th> 
+                            <th>Total</th> 
+                            <th>Status</th> 
+                            <th>Date</th> 
+                            <th>Action</th> 
+                        </tr> 
+ 
+                    </thead> 
+ 
+                    <tbody id="adminOrdersTable"></tbody> 
+ 
+                </table> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+    </section> 
+ 
+ 
+    <!-- ================= FOOTER ================= --> 
+ 
+    <footer> 
+ 
+        <p> 
+            © 2026 FreshCart | Online Grocery Store 
+        </p> 
+ 
+    </footer> 
+ 
+ 
+    <!-- ================= JAVASCRIPT ================= --> 
+ 
+    <script src="script.js"></script> 
+ 
+</body> 
+ 
+</html> 
